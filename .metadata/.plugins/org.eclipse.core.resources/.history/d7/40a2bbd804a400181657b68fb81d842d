@@ -1,0 +1,27 @@
+package com.sevendeleven.filebackup.main;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JComponent;
+
+public class ChooserPane extends JComponent{
+	
+	private static final long serialVersionUID = 1L;
+	
+	FileData[] cdInformation;
+	
+	public ChooserPane(FileData[] cdInformation) {
+		
+	}
+	
+	class Mouse extends MouseAdapter {
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			
+		}
+		
+	}
+	
+}

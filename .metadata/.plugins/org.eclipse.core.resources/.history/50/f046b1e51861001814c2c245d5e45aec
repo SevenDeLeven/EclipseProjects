@@ -1,0 +1,121 @@
+package com.sevendeleven.testproject.world;
+
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sevendeleven.testproject.main.Main;
+import com.sevendeleven.testproject.main.Register;
+import com.sevendeleven.testproject.renderer.Camera;
+import com.sevendeleven.testproject.util.PerlinNoise;
+
+public class World {
+	
+	final long seed;
+	
+	private List<Chunk> chunks = new ArrayList<Chunk>();
+	
+	public static final int minX = -200*16;
+	public static final int maxX = -minX;
+	public static final int width = maxX-minX;
+	public static final int height = 256;
+	
+	PerlinNoise noise;
+	
+	public World() {
+		seed = (long)Math.random()*Long.MAX_VALUE;
+		noise = new PerlinNoise(seed);
+		for (int i = 0; i < 5; i++) {
+			loadChunk(i*16 - (16*2));
+		}
+	}
+	
+	public World(long seed) {
+		this.seed = seed;
+	}
+	
+	public void draw(Graphics2D g) {
+		for (int i = 0; i < chunks.size(); i++) {
+			chunks.get(i).render(g);
+		}
+	}
+	
+	public int getBlock(BlockPos pos) {
+		Chunk chunk = getChunk(pos.getX());
+		if (chunk == null) return -1;
+		int blockX = pos.getX()%16;
+		blockX = blockX < 0 ? 16+blockX : blockX;
+		int blockY = pos.getY();
+		if (blockY < 0 || blockY >= 256 || blockX < 0 || blockX >= 16) {
+			return -1;
+		}
+		return chunk.getBlocks()[blockX][blockY];
+	}
+	
+	public int absolutePosX(double x) {
+		return (int)Math.ceil(x)+(width/2);
+	}
+	
+	public void placeBlock(Camera cam, int screenX, int screenY, Class<? extends Block> block) {
+		float x = ((cam.getX()/(float)Main.getBlockSize()) + screenX/(float)Main.getBlockSize()) + 0.0f;
+		float y = ((float)Chunk.HEIGHT-((float)cam.getY()/(float)Main.getBlockSize())) + (float)screenY/(float)Main.getBlockSize() - 26f;
+		placeBlock(x,y,block);
+	}
+	
+	public void placeBlock(float x, float y, Class<? extends Block> block) {
+		Chunk c;
+		try {
+			c = getChunk(x);
+		} catch (Exception e) {
+			return;
+		}
+		int cx = (int) (x%16);
+		int cy = (int) (y);
+		cx = cx < 0 ? 16+cx : cx;
+		
+		if (cy < 0 || cy > 255) {
+			return;
+		}
+		
+		cy = Chunk.HEIGHT-cy-1;
+		c.setBlock(cx, cy, Register.getId(block));
+		c.updateRenderBlock(cx, cy);
+	}
+	
+	public Chunk getChunk(float x) {
+		if (outOfLoadedBounds(x)) {
+			return loadChunk(x);
+		}
+		for (Chunk chunk : chunks) {
+			if (chunk.containsX(x)) {
+				return chunk;
+			}
+		}
+		return null;
+	}
+	
+	public Chunk generateChunk(float x) {
+		if (absolutePosX(x) < 0 || absolutePosX(x) > width) return null;
+		Chunk chunk = new Chunk(this, x);
+		chunk.generatePerlin(noise, 40, 5);
+		return chunk;
+	}
+	
+	public Chunk loadChunk(float x) {
+		Chunk c = generateChunk(x);
+		if (c != null) {
+			c.redraw();
+			chunks.add(c);
+		}
+		return c;
+	}
+	
+	public boolean outOfLoadedBounds(float x) {
+		for (Chunk chunk : chunks) {
+			if (chunk.containsX(x)) {
+				return false;
+			}
+		}
+		return true;
+	}
+}

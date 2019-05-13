@@ -1,0 +1,22 @@
+package com.sevendeleven.playerthing.client;
+
+import java.awt.Canvas;
+import java.util.HashMap;
+
+public class Game extends Canvas {
+	
+	HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	
+	public void run() {
+		
+	}
+	
+	public void update() {
+		
+	}
+	
+	public void draw() {
+		
+	}
+	
+}

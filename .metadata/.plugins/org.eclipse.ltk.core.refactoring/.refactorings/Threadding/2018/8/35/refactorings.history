@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 3 elements from project &apos;Threadding&apos;&#x0D;&#x0A;- Original project: &apos;Threadding&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     com.sevendeleven.threadding.main.Command.java&#x0D;&#x0A;     com.sevendeleven.threadding.main.Main.java&#x0D;&#x0A;     com.sevendeleven.threadding.main.SpamTimes.java" description="Delete elements" element1="/src&lt;com.sevendeleven.threadding.main{Command.java" element2="/src&lt;com.sevendeleven.threadding.main{Main.java" element3="/src&lt;com.sevendeleven.threadding.main{SpamTimes.java" elements="3" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1535759628835" subPackages="false" version="1.0"/>
+</session>

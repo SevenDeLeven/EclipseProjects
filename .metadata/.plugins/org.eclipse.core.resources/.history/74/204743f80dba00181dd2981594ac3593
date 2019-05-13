@@ -1,0 +1,5 @@
+package com.sevendeleven.playerthing.client;
+
+public class Player {
+
+}

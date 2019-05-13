@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="System.out" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="p"/>
+			<item value="System.out"/>
+			<item value="glEnable"/>
+			<item value="System"/>
+			<item value="glUniform"/>
+			<item value="View"/>
+			<item value="view"/>
+			<item value="glView"/>
+			<item value="new Entity"/>
+			<item value="new Sprite"/>
+			<item value="genVAO"/>
+			<item value="PacketBytes"/>
+			<item value="arg0"/>
+			<item value="&#x09;@Override"/>
+			<item value="// TODO Auto-generated method stub"/>
+		</list>
+		<list key="replacehistory">
+			<item value="PacketInformation"/>
+			<item value="e"/>
+			<item value=""/>
+			<item value="BYTE_STR_ESCAPE"/>
+			<item value="BYTE_STR_END"/>
+			<item value="PacketBytes"/>
+			<item value="panel.add"/>
+			<item value="getCurrentFolderData"/>
+			<item value="stacks[j]"/>
+			<item value="Vec2i"/>
+			<item value="row[j]"/>
+			<item value="Item"/>
+			<item value="item"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="284" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="391" key="DIALOG_HEIGHT"/>
+		<item value="2044" key="DIALOG_X_ORIGIN"/>
+		<item value="292" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

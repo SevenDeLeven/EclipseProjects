@@ -1,0 +1,23 @@
+package com.sevendeleven.filebackup.main;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
+public class DataTranslator {
+	
+	public static Integer readInteger(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+		for (int i = 0; i < Integer.BYTES; i++) {
+			try {
+				buffer.put((byte)is.read());
+			} catch (IOException e) {
+				System.err.println("Error processing integer");
+				System.exit(-1);
+			}
+		}
+		buffer.flip();
+		return buffer.getInt();
+	}
+	
+}

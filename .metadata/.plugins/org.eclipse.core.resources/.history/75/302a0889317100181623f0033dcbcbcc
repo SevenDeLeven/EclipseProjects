@@ -1,0 +1,16 @@
+package com.sevendeleven.testproject.world;
+
+import java.awt.image.BufferedImage;
+
+public abstract class Block {
+	
+	protected BufferedImage img;
+	public abstract void initialize();
+	public abstract void onNeighborUpdated(BlockPos pos);
+	public abstract void onUpdate(boolean updateNeighbors, BlockPos pos);
+	public abstract void onUse(BlockPos pos);
+	public abstract boolean isSolid();
+	public abstract BufferedImage getImage();
+	public abstract float getHardness();
+	
+}

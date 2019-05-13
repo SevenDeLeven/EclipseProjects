@@ -1,0 +1,109 @@
+package com.sevendeleven.testproject.gui;
+
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import com.sevendeleven.testproject.item.ItemStack;
+import com.sevendeleven.testproject.main.Main;
+import com.sevendeleven.testproject.main.ResourceLocator;
+
+public class Inventory extends GUI {
+	
+	public static enum InventoryUpgrade {
+		None,
+		Small,
+		Medium,
+		Large
+	}
+	
+	private BufferedImage img_inventory;
+	private BufferedImage img_inventoryu1;
+	private BufferedImage img_inventoryu2;
+	private BufferedImage img_inventoryu3;
+	private BufferedImage img_inventory_hotbar;
+	
+	
+	private Container inventory;
+	private Container hotbar;
+	
+	private InventoryUpgrade size;
+	
+	public Inventory(InventoryUpgrade size) {
+		super();
+		this.size = size;
+		inventory = new Container(Container.ContainerType.Inventory);
+		hotbar = new Container(Container.ContainerType.Hotbar);
+		img_inventory = ResourceLocator.getImage("inventory_noUpgrade");
+		img_inventoryu1 = ResourceLocator.getImage("inventory_upgradeSmall");
+		img_inventoryu2 = ResourceLocator.getImage("inventory_upgradeMedium");
+		img_inventoryu3 = ResourceLocator.getImage("inventory_upgradeLarge");
+		img_inventory_hotbar = ResourceLocator.getImage("inventory_hotbar");
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		BufferedImage img = null;
+		switch (inventory.getType()) {
+		case Inventory:
+			img = img_inventory;
+			break;
+		case InventoryU1:
+			img = img_inventoryu1;
+			break;
+		case InventoryU2:
+			img = img_inventoryu2;
+			break;
+		case InventoryU3:
+			img = img_inventoryu3;
+			break;
+		default:
+			System.err.println("Inventory is not of type INVENTORY");
+			System.exit(-1);
+			break;
+		}
+		g.drawImage(img, (Main.getMain().getWidth()/2) - (img.getWidth()/2), (Main.getMain().getHeight()/2) - (img.getHeight()/2), null);
+		g.drawImage(img_inventory_hotbar, (Main.getMain().getWidth()/2) - (img_inventory_hotbar.getWidth()/2), Main.getMain().getHeight()-(img_inventory_hotbar.getHeight()), null);
+	}
+	
+	public void renderItemStack(ItemStack e, int x, int y) {
+		
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void keyDown(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyUp(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void mouseMove(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseDrag(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseClick(MouseEvent e) {
+		
+	}
+	
+}

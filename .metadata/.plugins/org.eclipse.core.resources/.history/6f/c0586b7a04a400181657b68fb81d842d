@@ -1,0 +1,12 @@
+package com.sevendeleven.filebackup.main;
+
+public class FileData {
+
+	String filePath, name;
+	boolean directory;
+	
+	public FileData(String filePath, String name, boolean directory) {
+		
+	}
+	
+}

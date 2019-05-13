@@ -1,0 +1,289 @@
+package com.sevendeleven.filebackup.main;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+
+public class DataTranslator {
+	
+	public static Integer readInteger(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+		try {
+			for (int i = 0; i < Integer.BYTES; i++) {
+					int read = is.read();
+					if (read != -1) {
+						buffer.put((byte)read);
+					} else {
+						System.err.println("Error processing integer: input stream unexpectedly closed");
+					}
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing integer");
+			System.exit(-1);
+		}
+		buffer.flip();
+		return buffer.getInt();
+	}
+	
+	public static Float readFloat(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Float.BYTES);
+		try {
+			for (int i = 0; i < Float.BYTES; i++) {
+					int read = is.read();
+					if (read != -1) {
+						buffer.put((byte)read);
+					} else {
+						System.err.println("Error processing float: input stream unexpectedly closed");
+					}
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing float");
+			System.exit(-1);
+		}
+		buffer.flip();
+		return buffer.getFloat();
+	}
+	
+	public static Double readDouble(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
+		try {
+			for (int i = 0; i < Double.BYTES; i++) {
+					int read = is.read();
+					if (read != -1) {
+						buffer.put((byte)read);
+					} else {
+						System.err.println("Error processing double: input stream unexpectedly closed");
+					}
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing double");
+			System.exit(-1);
+		}
+		buffer.flip();
+		return buffer.getDouble();
+	}
+	
+	public static Long readLong(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		try {
+			for (int i = 0; i < Long.BYTES; i++) {
+					int read = is.read();
+					if (read != -1) {
+						buffer.put((byte)read);
+					} else {
+						System.err.println("Error processing long: input stream unexpectedly closed");
+					}
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing long");
+			System.exit(-1);
+		}
+		buffer.flip();
+		return buffer.getLong();
+	}
+	
+	public static Short readShort(InputStream is) {
+		ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
+		try {
+			for (int i = 0; i < Short.BYTES; i++) {
+					int read = is.read();
+					if (read != -1) {
+						buffer.put((byte)read);
+					} else {
+						System.err.println("Error processing short: input stream unexpectedly closed");
+					}
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing short");
+			System.exit(-1);
+		}
+		buffer.flip();
+		return buffer.getShort();
+	}
+	
+	public static String readString(InputStream is) {
+		String r = "";
+		int read = 0;
+		boolean escaped = false;
+		try {
+			while ((read = is.read()) != -1) {
+				byte b = (byte) read;
+				if (escaped) {
+					r = r + (char)b;
+					escaped = false;
+				} else {
+					if (b == Main.BYTE_ESCAPE_CHARACTER) {
+						escaped = true;
+					} else if (b == Main.BYTE_DATA_STREND) {
+						return r;
+					} else {
+						r = r + (char)b;
+					}
+				}
+			}
+			if (read == -1) {
+				System.err.println("Error processing String: end of stream reached");
+				System.exit(-1);
+			}
+		} catch (IOException e) {
+			System.err.println("Error processing String: IOException occurred");
+			System.exit(-1);
+		}
+		return r;
+	}
+
+	public static void writeInteger(OutputStream os, Integer o) {
+		ByteBuffer b = ByteBuffer.allocate(Integer.BYTES);
+		b.putInt(o);
+		try {
+			os.write(b.array());
+		} catch (IOException e) {
+			System.err.println("Error writing Integer: io exception occurred");
+			System.exit(-1);
+		}
+	}
+	public static void writeFloat(OutputStream os, Float o) {
+		ByteBuffer b = ByteBuffer.allocate(Float.BYTES);
+		b.putFloat(o);
+		try {
+			os.write(b.array());
+		} catch (IOException e) {
+			System.err.println("Error writing Float: io exception occurred");
+			System.exit(-1);
+		}
+	}
+	public static void writeDouble(OutputStream os, Double o) {
+		ByteBuffer b = ByteBuffer.allocate(Double.BYTES);
+		b.putDouble(o);
+		try {
+			os.write(b.array());
+		} catch (IOException e) {
+			System.err.println("Error writing Double: io exception occurred");
+			System.exit(-1);
+		}
+	}
+	public static void writeLong(OutputStream os, Long o) {
+		ByteBuffer b = ByteBuffer.allocate(Long.BYTES);
+		b.putLong(o);
+		try {
+			os.write(b.array());
+		} catch (IOException e) {
+			System.err.println("Error writing Long: io exception occurred");
+			System.exit(-1);
+		}
+	}
+	public static void writeShort(OutputStream os, Short o) {
+		ByteBuffer b = ByteBuffer.allocate(Short.BYTES);
+		b.putShort(o);
+		try {
+			os.write(b.array());
+		} catch (IOException e) {
+			System.err.println("Error writing Short: io exception occurred");
+			System.exit(-1);
+		}
+	}
+	public static void writeString(OutputStream os, String s) {
+		try {
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if ((byte)c==Main.BYTE_DATA_STREND || (byte)c==Main.BYTE_ESCAPE_CHARACTER) { 
+				os.write(Main.BYTE_ESCAPE_CHARACTER);
+			}
+			os.write((int)c);
+		}
+		os.write((int)Main.BYTE_DATA_STREND);
+		} catch (IOException e) {
+			System.err.println("Error writing String: io exception occurred");
+		}
+	}
+	public void putFile(ClientHandler ch, File input) {
+		FileInputStream is = null;
+		try {
+			is = new FileInputStream(input);
+			OutputStream os = ch.socket.getOutputStream();
+			
+			byte[] buffer = new byte[1024];
+			int read = 0;
+			while ((read = is.read(buffer)) != -1) {
+				os.write(new byte[] {Main.BYTE_FILEDATA, (byte)read});
+				os.write(buffer, 0, read);
+				Main.progress += read;
+				if (Main.cancel) {
+					Main.cancel = false;
+					os.write(Main.BYTE_CANCEL);
+					return;
+				}
+			}
+			
+			os.write(Main.BYTE_FILEEND);
+		} catch (FileNotFoundException e) {
+			System.err.println("Could not find file!");
+			ch.close();
+		} catch (IOException e) {
+			System.err.println("There was an error when uploading the file!");
+			ch.close();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				ch.close();
+			}
+		}
+	}
+	
+	public void getFile(ClientHandler ch, File output) {
+		if (output.exists()) {
+			output.delete();
+		}
+		FileOutputStream os = null;
+		try {
+			os = new FileOutputStream(output);
+			
+			InputStream is = ch.socket.getInputStream();
+			
+			int read = 0;
+			boolean reading = true;
+			while (reading) {
+				read = is.read();
+				if (read == -1) {
+					System.err.println("Connection ended unexpectedly, closing");
+					ch.close();
+				}
+				byte readByte = (byte) read;
+				switch (readByte) {
+				case Main.BYTE_FILEDATA:
+					int fileSize = DataTranslator.readInteger(is);
+					byte[] data = new byte[fileSize];
+					while (is.available() < fileSize) {}
+					if (is.read(data, 0, fileSize) == -1) {
+						System.err.println("Connection endex unexpectedly, closing");
+					}
+					
+					break;
+				case Main.BYTE_FILEEND:
+					
+					break;
+				}
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			ch.close();
+		} finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				ch.close();
+			}
+		}
+		
+	}
+	
+}

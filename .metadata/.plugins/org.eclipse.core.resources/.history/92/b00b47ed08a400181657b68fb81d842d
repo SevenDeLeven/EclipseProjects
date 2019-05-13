@@ -1,0 +1,53 @@
+package com.sevendeleven.filebackup.main;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+public class ChooserPane {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private JPanel panel;
+	
+	FileData[] cdInformation;
+	JButton[] fileButtons;
+	
+	public ChooserPane(FileData[] cdInformation) {
+		panel = new JPanel();
+		setInformation(cdInformation);
+	}
+	
+	public void setInformation(FileData[] info) {
+		this.cdInformation = info;
+		fileButtons = new JButton[cdInformation.length];
+		for (int i = 0; i < cdInformation.length; i++) {
+			fileButtons[i] = new JButton((cdInformation[i].directory ? "D : " : "F ") + cdInformation[i].name);
+			fileButtons[i].addActionListener(new Mouse(cdInformation[i]));
+			panel.add(fileButtons[i]);
+		}
+		panel.cl
+	}
+	
+	class Mouse implements ActionListener {
+		
+		FileData data;
+		public Mouse(FileData data) {
+			this.data = data;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (data.directory) {
+				//Mouse clicked on directory
+				Main.changeDirectory(data);
+			} else {
+				//Mouse clicked on file
+			}
+		}
+		
+	}
+	
+}

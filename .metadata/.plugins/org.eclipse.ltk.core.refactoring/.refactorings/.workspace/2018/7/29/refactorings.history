@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename Java project &apos;DiskAssesser&apos; to &apos;DiskAssessor&apos;&#x0D;&#x0A;- Original element: &apos;DiskAssesser&apos;&#x0D;&#x0A;- Renamed element: &apos;DiskAssesser&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename Java project &apos;DiskAssesser&apos;" flags="7" id="org.eclipse.jdt.ui.rename.java.project" input="=DiskAssesser" name="DiskAssessor" references="true" stamp="1531867400943" version="1.0"/>
+</session>

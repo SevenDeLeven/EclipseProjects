@@ -1,0 +1,11 @@
+package com.sevendeleven.playerthing.client;
+
+import java.awt.Canvas;
+
+public class Game extends Canvas {
+	
+	public void run() {
+		
+	}
+	
+}

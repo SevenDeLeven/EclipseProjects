@@ -1,0 +1,23 @@
+package com.sevendeleven.playerthing.client;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Player {
+	
+	public String username;
+	public Color color;
+	
+	public Player(String username, Color color) {
+		
+	}
+	
+	public void update(int x, int y) {
+		
+	}
+	
+	public void draw(Graphics g) {
+		
+	}
+	
+}

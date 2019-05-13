@@ -1,0 +1,147 @@
+package com.sevendeleven.terrilla.gui.screen;
+
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Queue;
+
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+
+import com.sevendeleven.terrilla.entity.Entity;
+import com.sevendeleven.terrilla.entity.EntityItem;
+import com.sevendeleven.terrilla.main.Renderer;
+import com.sevendeleven.terrilla.shaders.EntityShader;
+import com.sevendeleven.terrilla.util.ConcurrentHandler;
+import com.sevendeleven.terrilla.util.Loader;
+import com.sevendeleven.terrilla.util.ResourcesManager;
+import com.sevendeleven.terrilla.util.SpriteData;
+import com.sevendeleven.terrilla.world.RenderWorld;
+import com.sevendeleven.terrilla.world.World;
+
+public class GameScreen extends Screen {
+	
+	private RenderWorld renderWorld;
+	private World world;
+	
+	private long currentTime;
+	
+	private EntityShader entityShader;
+	
+	public GameScreen(Renderer renderer, World world) {
+		super(renderer);
+		this.entityShader = Loader.entityShader;
+		this.world = world;
+	}
+	
+	boolean firstTick = true; //TODO REMOVE
+	
+	@Override
+	public void update(ConcurrentHandler concurrentHandler, long currentTime, long deltaTick) {
+		if (firstTick) {
+			firstTick = false;
+			world.addEntity(new EntityItem("aluminum", 10, 10, 10));
+		}
+		for (Entity e : world.getEntities()) {
+			e.update(currentTime, deltaTick, concurrentHandler);
+		}
+	}
+	
+	public void renderAllSprites(Integer spriteModel, HashMap<Integer, HashMap<Long, SpriteData>> ents) {
+		glBindVertexArray(spriteModel);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ResourcesManager.getModelByVAOID(spriteModel).getIndicesVBOID());
+		for (Entry<Integer, HashMap<Long, SpriteData>> spriteList : ents.entrySet()) {
+			renderSprites(spriteList.getKey(), spriteList.getValue());
+		}
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+	
+	public void renderSprites(Integer spriteTexture, HashMap<Long, SpriteData> ents) {
+		glBindTexture(GL15.GL_TEXTURE_2D, spriteTexture);
+		for (Entry<Long, SpriteData> sd : ents.entrySet()) {
+			if (sd.getValue().getRemove()) {
+				renderWorld.scheduleRemoveSprite(sd.getValue());
+				continue;
+			}
+			GL20.glUniformMatrix4fv(this.entityShader.getTransformUniform(), false, sd.getValue().getTransform(currentTime, sd.getValue().getSprite()));
+			glDrawElements(GL_TRIANGLES, sd.getValue().getSprite().getModel().getIndexCount(), GL_UNSIGNED_BYTE, 0);
+		}
+	}
+	
+	
+	
+	@Override
+	public void drawScreen(ConcurrentHandler concurrentHandler) {
+		currentTime = System.currentTimeMillis();
+		this.entityShader.start();
+		
+		//RENDER SPRITES
+		
+		HashMap<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> sprites = renderWorld.getSpriteMap();
+		
+		for (Entry<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> sdMap : sprites.entrySet()) {
+			renderAllSprites(sdMap.getKey(), sdMap.getValue());
+		}
+		//END RENDER SPRITES
+		
+		this.entityShader.stop();
+		pollUpdates(concurrentHandler);
+		renderWorld.pollSpriteQueues();
+	}
+	
+	public void pollUpdates(ConcurrentHandler concurrentHandler) {
+		Queue<SpriteData> updates = concurrentHandler.getRenderUpdates();
+		while (!updates.isEmpty()) {
+			SpriteData data = updates.poll();
+			renderWorld.addSprite(data);
+		}
+		
+//		Queue<RenderChunk> chunkData = concurrentHandler.getChunkUpdates();
+//		while (!chunkData.isEmpty()) {
+//			RenderChunk data = chunkData.poll();
+//		}
+		
+	}
+
+	@Override
+	public void updateInit() {
+		//World is handed in the constructor, no need to create new world.
+	}
+
+	@Override
+	public void updateDeInit() {
+		
+	}
+
+	@Override
+	public void renderInit() {
+		renderWorld = new RenderWorld(this.world);
+	}
+
+	@Override
+	public void renderDeInit() {
+		
+	}
+
+	@Override
+	public void screenSizeChanged() {
+		
+	}
+	
+	
+}

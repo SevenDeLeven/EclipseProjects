@@ -1,0 +1,8 @@
+{
+	"name" : "dirt",
+	"uniqueNumber" : 3,
+	"hardness" : 40.1,
+	"texture" : "block_dirt",
+	"solid" : true,
+	"type" : "soil",
+}

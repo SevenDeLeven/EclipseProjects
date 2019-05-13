@@ -1,0 +1,13 @@
+package com.sevendeleven.playerthing.client;
+
+public class Player {
+	
+	public void update(int x, int y) {
+		
+	}
+	
+	public void draw(Graphics g) {
+		
+	}
+	
+}

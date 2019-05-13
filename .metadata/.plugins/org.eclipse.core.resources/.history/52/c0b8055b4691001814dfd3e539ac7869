@@ -1,0 +1,15 @@
+package com.sevendeleven.filebackup.main;
+
+public class Main {
+	
+	
+	public static final byte BYTE_BEGIN = 0x00;
+	
+	public static final byte BYTE_FILE = 0x14;
+	public static final byte BYTE_CANCEL = 0x15;
+	
+	public static void main(String[] args) {
+		
+	}
+	
+}

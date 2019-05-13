@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;2D Bombing Simulator&apos;" deleteContents="false" description="Delete resource &apos;2D Bombing Simulator&apos;" element1="/2D Bombing Simulator" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1534719598323"/>
+</session>

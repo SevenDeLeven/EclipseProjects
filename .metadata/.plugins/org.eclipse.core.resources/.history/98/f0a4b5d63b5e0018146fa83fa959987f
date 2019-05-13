@@ -1,0 +1,84 @@
+package com.sevendeleven.terrilla.render;
+
+import static org.lwjgl.glfw.GLFW.glfwGetWindowOpacity;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL30;
+
+import com.sevendeleven.terrilla.util.Loader;
+
+public class Sprite {
+	
+	private int vao = 0;
+	
+	public static final float[] quad = {
+			 0.5f, 0.5f,	//TOP RIGHT
+			-0.5f, 0.5f,	//TOP LEFT
+			-0.5f,-0.5f,	//BOTTOM LEFT
+			-0.5f,-0.5f,	//BOTTOM LEFT
+			 0.5f,-0.5f,	//BOTTOM RIGHT
+			 0.5f, 0.5f		//TOP RIGHT
+	};
+	
+	public static final float[] colors = {
+			1.0f,1.0f,1.0f,1.0f,
+			1.0f,1.0f,1.0f,1.0f,
+			1.0f,1.0f,1.0f,1.0f,
+			1.0f,1.0f,1.0f,1.0f
+	};
+	
+	public static final float[] uv = {
+			1.0f, 1.0f,		//TOP RIGHT
+			0.0f, 1.0f,		//TOP LEFT
+			0.0f, 0.0f,		//BOTTOM LEFT
+			0.0f, 0.0f,		//BOTTOM LEFT
+			1.0f, 0.0f,		//BOTTOM RIGHT
+			1.0f, 1.0f		//TOP RIGHT
+	};
+	
+	public Sprite() {
+		this.vao = Loader.genVAO();
+		storeDataInAttributes(0, 2, quad);
+		storeDataInAttributes(1, 4, colors);
+		storeDataInAttributes(2, 2, uv);
+		unbindVAO();
+	}
+	
+	public int getVAOID() {
+		return vao;
+	}
+	
+	public int getVertexCount() {
+		return quad.length/2;
+	}
+	
+	private void unbindVAO() {
+		GL30.glBindVertexArray(0);
+	}
+	
+	private void storeDataInAttributes(int attributeNumber, int attribSize, float[] data) {
+		int vboID = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, storeDataInFloatBuffer(data), GL_STATIC_DRAW);
+		glVertexAttribPointer(attributeNumber, attribSize, GL_FLOAT, false, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	
+	private FloatBuffer storeDataInFloatBuffer(float[] data) {
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
+	}
+	
+}

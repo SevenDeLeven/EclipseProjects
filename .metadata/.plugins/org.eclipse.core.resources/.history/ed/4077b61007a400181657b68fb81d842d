@@ -1,0 +1,18 @@
+package com.sevendeleven.filebackup.main;
+
+public class FileData {
+
+	String filePath, name;	//filePath does not contain the fileName
+	boolean directory;		//Whether or not the file is a directory
+	
+	public FileData(String filePath, String name, boolean directory) {
+		this.filePath = filePath;
+		this.name = name;
+		this.directory = directory;
+	}
+	
+	public String getAbsolutePath() {
+		return filePath+name;
+	}
+	
+}

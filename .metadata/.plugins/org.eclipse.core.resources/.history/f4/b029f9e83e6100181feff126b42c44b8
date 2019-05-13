@@ -1,0 +1,15 @@
+package com.sevendeleven.testproject.gui;
+
+public abstract class GUI {
+	
+	protected GUI() {}
+	
+	public abstract void draw(Graphics g);
+	public abstract void mouseDown(MouseEvent e);
+	public abstract void mouseUp(MouseEvent e);
+	public abstract void mouseMove(MouseEvent e);
+	public abstract void keyDown(KeyEvent e);
+	public abstract void keyUp(KeyEvent e);
+	public abstract boolean ignoreControls();
+	
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;size&apos; in &apos;com.sevendeleven.testproject.gui.Container&apos; to &apos;type&apos;&#x0D;&#x0A;- Original project: &apos;TestProject&apos;&#x0D;&#x0A;- Original element: &apos;com.sevendeleven.testproject.gui.Container.size&apos;&#x0D;&#x0A;- Renamed element: &apos;com.sevendeleven.testproject.gui.Container.type&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;size&apos;" flags="589830" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;com.sevendeleven.testproject.gui{Container.java[Container^size" name="type" references="true" setter="false" stamp="1527457808251" textual="false" version="1.0"/>
+</session>

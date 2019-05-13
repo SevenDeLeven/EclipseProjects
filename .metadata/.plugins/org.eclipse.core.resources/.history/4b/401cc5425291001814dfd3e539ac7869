@@ -1,0 +1,19 @@
+package com.sevendeleven.filebackup.main;
+
+public class Main {
+	
+	
+	public static final byte BYTE_BEGINSHARE = 0x00;	//Sent when the user clicks 'upload'
+	public static final byte BYTE_INFO_LOCATION = 0x10;	//Location data after the beginshare byte
+	public static final byte BYTE_FILEDATA = 0x20;		//File data during the file upload process
+	public static final byte BYTE_FILEEND = 0x21;		//End of file information, signifying the end
+	public static final byte BYTE_CANCEL = 0x22;		//File canceled byte, when the user cancels
+	public static final byte BYTE_DATA_STRBEGIN = 0x30; //String begin
+	public static final byte BYTE_DATA_STREND = 0x31;	//String end
+	
+	
+	public static void main(String[] args) {
+		
+	}
+	
+}

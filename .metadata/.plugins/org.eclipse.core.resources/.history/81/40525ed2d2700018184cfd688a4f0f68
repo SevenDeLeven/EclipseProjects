@@ -1,0 +1,114 @@
+package com.sevendeleven.testproject.main;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+
+import javax.swing.JOptionPane;
+
+import com.sevendeleven.testproject.item.Item;
+import com.sevendeleven.testproject.world.Block;
+
+public class Register {
+
+	private static final HashMap<Integer, Block> blocks;
+	private static final HashMap<Integer, Item> items;
+	
+	static {
+		blocks = new HashMap<Integer, Block>();
+		items = new HashMap<Integer, Item>();
+	}
+	
+	public static void registerItem(Class<? extends Item> clazz) {
+		if (clazz == null) {
+			System.err.println("An item was registered null (WHAT?!)");
+			return;
+		}
+		try {
+			Method initialize = clazz.getMethod("initialize");
+			Item instance = clazz.getConstructor().newInstance();
+			if (initialize != null) {
+				initialize.invoke(instance);
+			}
+			items.put(getNextItemId(), instance);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred in initializing the item " + clazz.getName());
+			System.exit(-1);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred in constructing the item " + clazz.getName());
+			System.exit(-1);
+		}
+	}
+	
+	public static int getNextItemId() {
+		for (int i = 0; i < 255; i++) {
+			if (!items.containsKey(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static Item getItem(int id) {
+		return items.get(id);
+	}
+	
+	public static int getItemId(Class<? extends Item> item) {
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i).getClass().equals(item)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static void registerBlock(Class<? extends Block> clazz) {
+		if (clazz == null) {
+			System.err.println("A block was registered null (What?!)");
+			return;
+		}
+		try {
+			Method initialize = clazz.getMethod("initialize");
+			Block instance = clazz.getConstructor().newInstance();
+			if (initialize != null) {
+				initialize.invoke(instance);
+			}
+			blocks.put(getNextBlockId(), instance);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred in initializing the block " + clazz.getName());
+			System.exit(-1);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error occurred in constructing the block " + clazz.getName());
+			System.exit(-1);
+		}
+	}
+	
+	public static int getNextBlockId() {		//Public because it does not change any values
+		for (int i = 0; i < 255; i++) {
+			if (!blocks.containsKey(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static Block getBlock(int id) {
+		return blocks.get(id);
+	}
+	
+	public static int getBlockId(Class<? extends Block> block) {
+		for (int i = 0; i < blocks.size(); i++) {
+			if (blocks.get(i).getClass().equals(block)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+}

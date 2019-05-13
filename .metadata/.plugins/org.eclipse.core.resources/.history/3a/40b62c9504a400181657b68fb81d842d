@@ -1,0 +1,13 @@
+package com.sevendeleven.filebackup.main;
+
+import javax.swing.JComponent;
+
+public class ChooserPane extends JComponent{
+
+	private static final long serialVersionUID = 1L;
+	
+	public ChooserPane() {
+		
+	}
+	
+}

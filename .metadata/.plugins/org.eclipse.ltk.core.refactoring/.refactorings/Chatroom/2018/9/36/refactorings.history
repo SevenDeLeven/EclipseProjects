@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;DataTranslator.java&apos; to &apos;ChatProgram/src/com.sevendeleven.chatprogram.protocol&apos;&#x0D;&#x0A;- Original project: &apos;Chatroom&apos;&#x0D;&#x0A;- Destination element: &apos;ChatProgram/src/com.sevendeleven.chatprogram.protocol&apos;&#x0D;&#x0A;- Original element: &apos;com.sevendeleven.chatroom.protocol.DataTranslator.java&apos;" description="Copy compilation unit" destination="=ChatProgram/src&lt;com.sevendeleven.chatprogram.protocol" element1="/src&lt;com.sevendeleven.chatroom.protocol{DataTranslator.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1535999820340" units="1" version="1.0"/>
+</session>

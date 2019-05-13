@@ -1,0 +1,19 @@
+package com.sevendeleven.filebackup.main;
+
+import java.io.IOException;
+import java.net.Socket;
+
+public class ClientHandler {
+	
+	public Socket socket;
+	
+	public ClientHandler() {
+		try {
+			socket = new Socket("localhost", 40304);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+	
+}
