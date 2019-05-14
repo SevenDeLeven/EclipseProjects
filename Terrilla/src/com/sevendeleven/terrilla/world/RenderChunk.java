@@ -5,7 +5,7 @@ import org.joml.Vector4f;
 public class RenderChunk {
 	
 	private int[][] blocks = new int[32][1024];
-	private int[][] walls = new int[32][1024];
+	private int[][] backgrounds = new int[32][1024];
 	
 	private int chunkX;
 	

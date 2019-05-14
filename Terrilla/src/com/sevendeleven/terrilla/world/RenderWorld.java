@@ -10,8 +10,6 @@ import com.sevendeleven.terrilla.util.SpriteData;
 
 public class RenderWorld {
 	
-	private World world;
-	
 	private List<RenderChunk> renderChunks = new ArrayList<RenderChunk>();
 	
 	private HashMap<Long, SpriteData> spritesByID = new HashMap<Long, SpriteData>();
@@ -23,8 +21,8 @@ public class RenderWorld {
 	private Queue<SpriteData> removeSpriteQueue = new LinkedList<>();
 	private Queue<RenderChunk> addChunkQueue = new LinkedList<>();
 	
-	public RenderWorld(World world) {
-		this.world = world;
+	public RenderWorld() {
+		
 	}
 	
 	public HashMap<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> getSpriteMap() {
@@ -53,9 +51,6 @@ public class RenderWorld {
 	
 	public void addSprite(SpriteData sprite) {
 		spritesByID.put(sprite.getID(), sprite);
-		System.out.println(sprite == null);
-		System.out.println(sprite.getSprite() == null);
-		System.out.println(sprite.getSprite().getModel() == null);
 		int modelID = sprite.getSprite().getModel().getVAOID();
 		int texID = sprite.getSprite().getTexture().getID();
 		if (!spritesByModelAndTexture.containsKey(modelID)) {
