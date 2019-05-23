@@ -60,7 +60,7 @@ public class GUIButton extends GUIElement {
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, Model.getQuad().getIndicesVBOID());
-		glBindTexture(GL15.GL_TEXTURE_2D, ResourcesManager.getSprite("button").getTexture().getID());
+		glBindTexture(GL15.GL_TEXTURE_2D, ResourcesManager.getSprite("tra:gui_button").getTexture().getID());
 	}
 	
 	public static void endDraw() {

@@ -1,0 +1,5 @@
+package com.sevendeleven.terrilla.shaders;
+
+public class ForegroundShader {
+
+}

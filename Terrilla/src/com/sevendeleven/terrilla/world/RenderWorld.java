@@ -6,7 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.sevendeleven.terrilla.main.Main;
+import com.sevendeleven.terrilla.main.Renderer;
+import com.sevendeleven.terrilla.util.ConcurrentHandler;
 import com.sevendeleven.terrilla.util.SpriteData;
+import com.sevendeleven.terrilla.util.Vec2f;
 
 public class RenderWorld {
 	
@@ -21,12 +25,53 @@ public class RenderWorld {
 	private Queue<SpriteData> removeSpriteQueue = new LinkedList<>();
 	private Queue<RenderChunk> addChunkQueue = new LinkedList<>();
 	
-	public RenderWorld() {
+	private List<Vec2f> requestedChunks = new ArrayList<Vec2f>();
+	
+	private Renderer renderer;
+	private ConcurrentHandler concurrentHandler;
+	
+	public RenderWorld(Renderer renderer) {
+		this.renderer = renderer;
+		this.concurrentHandler = renderer.getConcurrentHandler();
 		
+	}
+	
+	public List<RenderChunk> getRenderChunks() {
+		return this.renderChunks;
 	}
 	
 	public HashMap<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> getSpriteMap() {
 		return spritesByModelAndTexture;
+	}
+	
+	public void update() {
+		int minX = (int) Math.floor(renderer.getCamera().getX() - 128);
+		minX = Trans
+		int maxX = (int) Math.ceil(renderer.getCamera().getX()+Main.getScreenWidth()+128);
+		for (int i = 0; i < renderChunks.size(); i++) {
+			RenderChunk chunk = renderChunks.get(i);
+			if (chunk == null || (chunk.getChunkLeft() > maxX || chunk.getChunkRight() < minX)) {
+				renderChunks.remove(i);
+				i--;
+			}
+		}
+		
+		for (int i = minX; i <= maxX; i += Chunk.CHUNK_WIDTH) {
+			int mod = i%Chunk.CHUNK_WIDTH;
+			int left = i-mod;
+			int right = left+Chunk.CHUNK_WIDTH;
+			boolean cont = false;
+			for (Vec2f b : requestedChunks) {
+				if (i >= b.x && i < b.y) {
+					cont = true;
+				}
+			}
+			if (cont) continue;
+			requestedChunks.add(new Vec2f(left, right));
+			if (getChunkAtX(i) == null/*CHECK THAT THE CHUNK HASN'T BEEN REQUESTED YET*/) {
+				concurrentHandler.requestChunk(i);
+			}
+		}
 	}
 	
 	public void pollSpriteQueues() {
@@ -36,8 +81,22 @@ public class RenderWorld {
 		while (!removeSpriteQueue.isEmpty()) {
 			removeSprite(removeSpriteQueue.poll());
 		}
-		while (!addChunkQueue.isEmpty()) {
-			
+		while (!concurrentHandler.getRenderChunkUpdates().isEmpty()) {
+			System.out.println("Chunk in addChunkQueue being polled");
+			RenderChunk chunk = concurrentHandler.getRenderChunkUpdates().poll();
+			boolean removed = false;
+			for (int i = 0; i < requestedChunks.size(); i++) {
+				Vec2f requestedChunk = requestedChunks.get(i);
+				if (chunk.getChunkX() >= requestedChunk.x && chunk.getChunkX() <= requestedChunk.y) {
+					requestedChunks.remove(i);
+					removed = true;
+					break;
+				}
+			}
+			if (!removed) {
+				System.err.println("Added Chunk was not in requestedChunk list");
+			}
+			addChunk(addChunkQueue.poll());
 		}
 	}
 	
@@ -47,6 +106,10 @@ public class RenderWorld {
 	
 	public synchronized void scheduleAddSprite(SpriteData sprite) {
 		addSpriteQueue.add(sprite);
+	}
+	
+	public void addChunk(RenderChunk chunk) {
+		renderChunks.add(chunk);
 	}
 	
 	public void addSprite(SpriteData sprite) {
@@ -88,6 +151,15 @@ public class RenderWorld {
 			return;
 		}
 		sprites.remove(sprite.getID());
+	}
+	
+	public RenderChunk getChunkAtX(int x) {
+		for (RenderChunk chunk : renderChunks) {
+			if (x >= chunk.getChunkLeft() && x < chunk.getChunkRight()) {
+				return chunk;
+			}
+		}
+		return null;
 	}
 	
 	public HashMap<Integer, HashMap<Long, SpriteData>> getSpriteMapByModel(int modelID) {

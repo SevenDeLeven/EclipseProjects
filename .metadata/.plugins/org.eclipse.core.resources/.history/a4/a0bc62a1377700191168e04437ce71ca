@@ -1,0 +1,37 @@
+package com.sevendeleven.terrilla.world;
+
+import org.joml.Vector4f;
+
+public class RenderChunk {
+	
+	private int[][] blocks = new int[32][1024];
+	private int[][] backgrounds = new int[32][1024];
+	
+	private int chunkX;
+	
+	public RenderChunk(Chunk chunk) {
+		this.chunkX = chunk.getXOffset();
+	}
+	
+	public void draw() {
+		
+	}
+	
+	public void draw(Vector4f view) {
+		if ((view.x+view.z) < chunkX*32 || view.x > chunkX*32+32 || view.y + view.w < 0 || view.y > 1024) {
+			return;
+		}
+		int minX = view.x > chunkX*32 ? (int)Math.floor(view.x%32.0f) : 0;
+		int minY = (int) Math.floor(view.y);
+		if (minY < 0) minY = 0;
+		int maxX = view.x+view.z < chunkX*32+32 ? (int)Math.ceil((view.x+view.z)%32.0f) : 32;
+		int maxY = (int) Math.floor(view.y);
+		if (maxY > 1024) maxY = 1024;
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
+				
+			}
+		}
+	}
+	
+}

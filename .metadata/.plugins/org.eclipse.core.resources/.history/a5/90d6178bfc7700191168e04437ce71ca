@@ -1,0 +1,122 @@
+package com.sevendeleven.terrilla.world;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import com.sevendeleven.terrilla.main.Main;
+import com.sevendeleven.terrilla.main.Renderer;
+import com.sevendeleven.terrilla.util.SpriteData;
+
+public class RenderWorld {
+	
+	private List<RenderChunk> renderChunks = new ArrayList<RenderChunk>();
+	
+	private HashMap<Long, SpriteData> spritesByID = new HashMap<Long, SpriteData>();
+	
+	//				Model			 Texture		  ID	Sprite
+	private HashMap<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> spritesByModelAndTexture = new HashMap<>();
+	
+	private Queue<SpriteData> addSpriteQueue = new LinkedList<>();
+	private Queue<SpriteData> removeSpriteQueue = new LinkedList<>();
+	private Queue<RenderChunk> addChunkQueue = new LinkedList<>();
+	
+	private Renderer renderer;
+	
+	public RenderWorld(Renderer renderer) {
+		this.renderer = renderer;
+	}
+	
+	public HashMap<Integer, HashMap<Integer, HashMap<Long, SpriteData>>> getSpriteMap() {
+		return spritesByModelAndTexture;
+	}
+	
+	public void update() {
+		int minX = (int) Math.floor(renderer.getCamera().getX() - 128);
+		int maxX = (int) Math.ceil(renderer.getCamera().getX()+Main.getMain().getScreenWidth()+128);
+		for (int i = 0; i < renderChunks.size(); i++) {
+			RenderChunk chunk = renderChunks.get(i);
+			if (chunk.getChunkLeft() > maxX || chunk.getChunkRight() < minX) {
+				renderChunks.remove(i);
+				i--;
+			}
+		}
+		
+	}
+	
+	public void pollSpriteQueues() {
+		while (!addSpriteQueue.isEmpty()) {
+			addSprite(addSpriteQueue.poll());
+		}
+		while (!removeSpriteQueue.isEmpty()) {
+			removeSprite(removeSpriteQueue.poll());
+		}
+		while (!addChunkQueue.isEmpty()) {
+			addChunk(addChunkQueue.poll());
+		}
+	}
+	
+	public synchronized void scheduleRemoveSprite(SpriteData sprite) {
+		removeSpriteQueue.add(sprite);
+	}
+	
+	public synchronized void scheduleAddSprite(SpriteData sprite) {
+		addSpriteQueue.add(sprite);
+	}
+	
+	public void addChunk(RenderChunk chunk) {
+		renderChunks.add(chunk);
+	}
+	
+	public void addSprite(SpriteData sprite) {
+		spritesByID.put(sprite.getID(), sprite);
+		int modelID = sprite.getSprite().getModel().getVAOID();
+		int texID = sprite.getSprite().getTexture().getID();
+		if (!spritesByModelAndTexture.containsKey(modelID)) {
+			spritesByModelAndTexture.put(modelID, new HashMap<Integer, HashMap<Long, SpriteData>>());
+		}
+		HashMap<Integer, HashMap<Long, SpriteData>> spritesByTexture = spritesByModelAndTexture.get(modelID);
+		if (!spritesByTexture.containsKey(texID)) {
+			spritesByTexture.put(texID, new HashMap<Long, SpriteData>());
+		}
+		HashMap<Long, SpriteData> sprites = spritesByTexture.get(texID);
+		if (!sprites.containsKey(sprite.getID())) {
+			sprites.put(sprite.getID(), sprite);
+		} else {
+			SpriteData oldSprite = sprites.get(sprite.getID());
+			oldSprite.update(sprite);
+		}
+	}
+	
+	public void removeSprite(SpriteData sprite) {
+		spritesByID.remove(sprite.getID());
+		int modelID = sprite.getSprite().getModel().getVAOID();
+		int texID = sprite.getSprite().getTexture().getID();
+		if (!spritesByModelAndTexture.containsKey(modelID)) {
+			System.err.println("Tried to remove spritedata that didnt exist in model-texture-id map!");
+			return;
+		}
+		HashMap<Integer, HashMap<Long, SpriteData>> spritesByTexture = spritesByModelAndTexture.get(modelID);
+		if (!spritesByTexture.containsKey(texID)) {
+			System.err.println("Tried to remove spritedata that didnt exist in texture-id map!");
+			return;
+		}
+		HashMap<Long, SpriteData> sprites = spritesByTexture.get(texID);
+		if (!sprites.containsKey(sprite.getID())) {
+			System.err.println("Tried to remove nonexistant sprite from id map!");
+			return;
+		}
+		sprites.remove(sprite.getID());
+	}
+	
+	public HashMap<Integer, HashMap<Long, SpriteData>> getSpriteMapByModel(int modelID) {
+		return spritesByModelAndTexture.get(modelID);
+	}
+	
+	public SpriteData getSpriteById(long id) {
+		return this.spritesByID.get(id);
+	}
+	
+}

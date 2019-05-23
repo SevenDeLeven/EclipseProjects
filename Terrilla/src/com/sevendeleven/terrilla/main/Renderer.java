@@ -82,7 +82,10 @@ public class Renderer implements Runnable {
 	
 	private Screen currentScreen;
 	
+	private static volatile Renderer renderer;
+	
 	public Renderer() {
+		renderer = this;
 		camera = new Camera(0,0);
 	}
 	
@@ -147,9 +150,7 @@ public class Renderer implements Runnable {
 		
 		Model.initQuad();
 		//TODO Generate list of items to get instead of loading each one individually
-		ResourcesManager.registerSprite("item_aluminum_ingot", new Sprite(ResourcesManager.loadTexture("/aluminum.png"), Model.getQuad()));
-		ResourcesManager.registerSprite("button", new Sprite(ResourcesManager.loadTexture("/button.png"), Model.getQuad()));
-		
+		Loader.loadAssets();
 		//END Sprite INIT
 		initialized = true;
 	}
@@ -164,6 +165,10 @@ public class Renderer implements Runnable {
 		
 		Loader.unload();
 		ResourcesManager.offloadTextures();
+	}
+	
+	public static synchronized Renderer getRenderer() {
+		return renderer;
 	}
 	
 	public boolean isInitialized() {
@@ -247,8 +252,6 @@ public class Renderer implements Runnable {
 		}
 	}
 	
-	
-	
 	public void callEvents() {
 		while (!eventBus.isEmpty()) {
 			RenderEvent event = eventBus.poll();
@@ -266,6 +269,10 @@ public class Renderer implements Runnable {
 	
 	public Camera getCamera() {
 		return this.camera;
+	}
+	
+	public ConcurrentHandler getConcurrentHandler() {
+		return this.concurrentHandler;
 	}
 	
 }

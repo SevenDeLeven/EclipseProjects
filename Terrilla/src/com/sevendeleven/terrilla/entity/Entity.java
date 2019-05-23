@@ -14,7 +14,6 @@ public abstract class Entity {
 	public float angle;
 	
 	protected Entity(Sprite sprite, long uniqueID, float x, float y) {
-		System.out.println(sprite);
 		this.sprite = sprite;
 		this.x = x;
 		this.y = y;

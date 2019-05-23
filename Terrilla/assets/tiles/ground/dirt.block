@@ -1,5 +1,6 @@
 {
 	"name" : "dirt",
+	"sprite" : "tra:tile_dirt",
 	"uniqueNumber" : 3,
 	"hardness" : 40.1,
 	"texture" : "block_dirt",

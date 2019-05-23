@@ -1,4 +1,4 @@
-package com.sevendeleven.testproject.util;
+jpackage com.sevendeleven.testproject.util;
 
 import java.nio.ByteBuffer;
 

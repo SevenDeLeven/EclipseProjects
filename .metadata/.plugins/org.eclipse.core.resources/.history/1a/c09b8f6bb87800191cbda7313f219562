@@ -1,0 +1,5 @@
+package com.sevendeleven.terrilla.world;
+
+public class Tile {
+
+}

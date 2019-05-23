@@ -1,0 +1,5 @@
+package com.sevendeleven.terrilla.world.prefabtiles;
+
+public class TileAir {
+
+}

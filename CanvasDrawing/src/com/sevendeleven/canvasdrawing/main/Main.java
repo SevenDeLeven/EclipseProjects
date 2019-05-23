@@ -13,8 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class Main extends Canvas {
-	
-	
+	private static final long serialVersionUID = 1L;
+
 	JFrame frame;
 	
 	BufferedImage img;

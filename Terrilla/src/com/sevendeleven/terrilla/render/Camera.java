@@ -16,19 +16,19 @@ public class Camera {
 		this.y = y;
 	}
 	
-	void setX(float x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
-	void setY(float y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
-	float getX() {
+	public float getX() {
 		return this.x;
 	}
 	
-	float getY() {
+	public float getY() {
 		return this.y;
 	}
 	

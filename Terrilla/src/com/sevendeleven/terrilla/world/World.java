@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.sevendeleven.terrilla.entity.Entity;
+import com.sevendeleven.terrilla.util.BlockPos;
 import com.sevendeleven.terrilla.util.PerlinNoise;
 
 public class World {
@@ -62,17 +63,35 @@ public class World {
 				return chunk;
 			}
 		}
+		System.out.println("returning null as chunk for x " + x);
 		return null;
 	}
 	
+	public Chunk loadChunk(int chunkX) {
+		generateChunk(chunkX);
+		return getChunkAtX(chunkX*Chunk.CHUNK_WIDTH);
+	}
+	
 	public void generateChunk(int chunkX) {
-		if (getChunkAtX(chunkX*32) != null) {
-			System.err.println("Tried to re-generate a chunk at chunkX " + chunkX);
+		if (getChunkAtX(chunkX*Chunk.CHUNK_WIDTH) != null) {
 			return;
 		}
-		Chunk chunk = new Chunk();
+		Chunk chunk = new Chunk(chunkX);
 		chunk.generate(noise, 40, 5);
 		chunks.add(chunk);
+	}
+	
+	public int getBlock(BlockPos pos) {
+		if (getChunkAtX(pos.getX()) != null) {
+			return getChunkAtX(pos.getX()).getBlock(pos.getX(), pos.getY());
+		} else {
+			System.err.println("Block attempted to be accessed outside of load area ("+pos.getX() + ", "+pos.getY()+")");
+			return 0;
+		}
+	}
+	
+	public void placeBlock(int x, int y, int id, boolean calculated) { //Calculated: whether or not the screen pos was calculated to world pos
+		
 	}
 	
 }

@@ -1,0 +1,9 @@
+package com.sevendeleven.terrilla.shaders;
+
+public class ForegroundShader extends ShaderProgram {
+	
+	public ForegroundShader() {
+		super("src/com/sevendeleven/terrilla/shaders/foregroundShader.vert", "src/com/sevendeleven/terrilla/shaders/foregroundShader.frag")
+	}
+	
+}

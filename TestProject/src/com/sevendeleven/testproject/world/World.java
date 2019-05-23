@@ -180,7 +180,7 @@ public class World {
 		cx = cx < 0 ? Chunk.WIDTH+cx : cx;
 		
 		if (cy < 0 || cy > Chunk.HEIGHT-1) {
-			System.out.println("out of bounds");
+			System.out.println("Block placement is of bounds");
 			return;
 		}
 		

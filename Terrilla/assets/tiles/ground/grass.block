@@ -1,5 +1,6 @@
 {
 	"name" : "grass",
+	"sprite" : "tra:tile_grass",
 	"uniqueNumber": 2,
 	"hardness" : 90.1,
 	"texture" : "block_grass",

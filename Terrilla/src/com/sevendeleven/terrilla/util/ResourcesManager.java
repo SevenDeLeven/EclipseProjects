@@ -62,7 +62,7 @@ public class ResourcesManager {
 		} else {
 			BufferedImage image;
 			try {
-				System.out.println(texturePath);
+				System.out.println("Loading texture: " + texturePath);
 				image = ImageIO.read(Main.class.getResource(texturePath));
 	        } catch (IOException e) {
 	        	e.printStackTrace();
