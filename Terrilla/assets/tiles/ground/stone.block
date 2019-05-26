@@ -1,8 +1,8 @@
 {
 	"name" : "stone",
+	"sprite" : "tra:tile_stone",
 	"uniqueNumber" : 1,
 	"hardness" : 120.1,
-	"texture" : "block_stone",
 	"solid" : true,
 	"type" : "solid"
 }

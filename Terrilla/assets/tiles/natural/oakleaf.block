@@ -3,7 +3,6 @@
 	"sprite" : "tra:tile_oakleaf",
 	"uniqueNumber" : 6,
 	"hardness" : 20.1,
-	"texture" : "block_oakleaf",
 	"solid" : false,
 	"type" : "wood"
 }

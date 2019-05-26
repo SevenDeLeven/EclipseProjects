@@ -3,7 +3,6 @@
 	"sprite" : "tra:tile_oakwood",
 	"uniqueNumber" : 5,
 	"hardness" : 65.1,
-	"texture" : "block_oak",
 	"solid" : false,
 	"type" : "wood"
 }

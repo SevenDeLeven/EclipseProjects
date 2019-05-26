@@ -3,7 +3,6 @@
 	"sprite" : "tra:tile_grass",
 	"uniqueNumber": 2,
 	"hardness" : 90.1,
-	"texture" : "block_grass",
 	"solid" : true,
 	"type" : "soil",
 }

@@ -8,8 +8,10 @@ import java.util.Queue;
 
 import com.sevendeleven.terrilla.main.Main;
 import com.sevendeleven.terrilla.main.Renderer;
+import com.sevendeleven.terrilla.util.BlockPos;
 import com.sevendeleven.terrilla.util.ConcurrentHandler;
 import com.sevendeleven.terrilla.util.SpriteData;
+import com.sevendeleven.terrilla.util.Util;
 import com.sevendeleven.terrilla.util.Vec2f;
 
 public class RenderWorld {
@@ -23,15 +25,12 @@ public class RenderWorld {
 	
 	private Queue<SpriteData> addSpriteQueue = new LinkedList<>();
 	private Queue<SpriteData> removeSpriteQueue = new LinkedList<>();
-	private Queue<RenderChunk> addChunkQueue = new LinkedList<>();
 	
 	private List<Vec2f> requestedChunks = new ArrayList<Vec2f>();
 	
-	private Renderer renderer;
 	private ConcurrentHandler concurrentHandler;
 	
 	public RenderWorld(Renderer renderer) {
-		this.renderer = renderer;
 		this.concurrentHandler = renderer.getConcurrentHandler();
 		
 	}
@@ -45,9 +44,10 @@ public class RenderWorld {
 	}
 	
 	public void update() {
-		int minX = (int) Math.floor(renderer.getCamera().getX() - 128);
-		minX = Trans
-		int maxX = (int) Math.ceil(renderer.getCamera().getX()+Main.getScreenWidth()+128);
+		BlockPos minPos = Util.translateScreenPosToBlockPos(0, 0);
+		BlockPos maxPos = Util.translateScreenPosToBlockPos(Main.getScreenWidth(), 0);
+		int minX = minPos.getX();
+		int maxX = maxPos.getX();
 		for (int i = 0; i < renderChunks.size(); i++) {
 			RenderChunk chunk = renderChunks.get(i);
 			if (chunk == null || (chunk.getChunkLeft() > maxX || chunk.getChunkRight() < minX)) {
@@ -70,6 +70,7 @@ public class RenderWorld {
 			requestedChunks.add(new Vec2f(left, right));
 			if (getChunkAtX(i) == null/*CHECK THAT THE CHUNK HASN'T BEEN REQUESTED YET*/) {
 				concurrentHandler.requestChunk(i);
+				System.out.println("requested chunk at x " + i);
 			}
 		}
 	}
@@ -96,7 +97,7 @@ public class RenderWorld {
 			if (!removed) {
 				System.err.println("Added Chunk was not in requestedChunk list");
 			}
-			addChunk(addChunkQueue.poll());
+			addChunk(chunk);
 		}
 	}
 	
@@ -157,6 +158,8 @@ public class RenderWorld {
 		for (RenderChunk chunk : renderChunks) {
 			if (x >= chunk.getChunkLeft() && x < chunk.getChunkRight()) {
 				return chunk;
+			} else {
+				System.out.println(chunk.getChunkLeft());
 			}
 		}
 		return null;

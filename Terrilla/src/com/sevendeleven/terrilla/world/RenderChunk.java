@@ -17,8 +17,10 @@ import org.lwjgl.opengl.GL15;
 import com.sevendeleven.terrilla.main.Main;
 import com.sevendeleven.terrilla.main.Register;
 import com.sevendeleven.terrilla.render.Model;
+import com.sevendeleven.terrilla.util.BlockPos;
 import com.sevendeleven.terrilla.util.Loader;
 import com.sevendeleven.terrilla.util.Transform;
+import com.sevendeleven.terrilla.util.Util;
 
 public class RenderChunk {
 	
@@ -36,14 +38,23 @@ public class RenderChunk {
 	}
 	
 	public void draw(Vector4f view) {
-		if ((view.x+view.w) < chunkX*32 || view.x > chunkX*32+32 || view.y + view.z < 0 || view.y > 1024) {
+		
+		
+		BlockPos minPos = Util.translateScreenPosToBlockPos((int)view.x, (int)view.y);
+		BlockPos maxPos = Util.translateScreenPosToBlockPos((int)(view.x+view.w), (int)(view.y+view.z));
+
+		
+		
+		if (maxPos.getX() < chunkX*Chunk.CHUNK_WIDTH || minPos.getX() > (chunkX+1)*Chunk.CHUNK_WIDTH || minPos.getY() < 0 || maxPos.getY() > 1024) {
 			return;
 		}
-		int minX = view.x > chunkX*32 ? (int)Math.floor(view.x%32.0f) : 0;
-		int minY = (int) Math.floor(view.y);
+		
+		int minX = minPos.getX()%Chunk.CHUNK_WIDTH;
+		int minY = maxPos.getY();
 		if (minY < 0) minY = 0;
-		int maxX = view.x+view.z < (chunkX+1)*Chunk.CHUNK_WIDTH ? (int)Math.ceil((view.x+view.z)%32.0f) : 32;
-		int maxY = (int) Math.floor(view.y);
+		int maxX = maxPos.getX()%Chunk.CHUNK_WIDTH;
+		if (maxX < minX) maxX = Chunk.CHUNK_WIDTH;
+		int maxY = minPos.getY();
 		if (maxY > 1024) maxY = 1024;
 		
 		
@@ -51,14 +62,15 @@ public class RenderChunk {
 		for (int x = minX; x < maxX; x++) {
 			for (int y = minY; y < maxY; y++) {
 				int b = blocks[x][y];
-				if (!blockTypesInArea.containsKey(b)) {
-					blockTypesInArea.put(b, new ArrayList<int[]>());
+				if (b != 0) {
+					System.out.println(b);
+					if (!blockTypesInArea.containsKey(b)) {
+						blockTypesInArea.put(b, new ArrayList<int[]>());
+					}
+					blockTypesInArea.get(b).add(new int[]{x, y});
 				}
-				blockTypesInArea.get(b).add(new int[]{x, y});
 			}
 		}
-		
-		System.out.println("test");
 		for (int bType : blockTypesInArea.keySet()) {
 			beginBlockRender(bType);
 			for (int[] pos : blockTypesInArea.get(bType)) {
@@ -75,6 +87,7 @@ public class RenderChunk {
 	
 	public void beginBlockRender(int id) {
 		Tile tile = Register.getTile(id);
+		System.out.println(id + " " + tile.getSprite());
 		glBindTexture(GL15.GL_TEXTURE_2D, tile.getSprite().getTexture().getID());
 	}
 	
